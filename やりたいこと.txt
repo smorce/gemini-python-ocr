@@ -1,0 +1,21 @@
+リアルタイムでカメラの情報から質問に答える。SeeActフォルダにPythonコードあり
+https://x.com/taiyo_aiaa/status/1796207310135853268?s=12
+
+使用ツール
+✔︎Gemini Flash
+✔︎Open AI Whisper
+✔︎Open AI TTS API
+✔︎Open CV
+Twitterのスクレイピングやってるけどこれできそう
+
+リッスン状態にして
+ウィスパーで
+ウェイクアップ
+スリープ。
+
+文字起こしした内容をGemimに渡して
+「ユーザーからの何らかのリクエスト」ならTrueを返してもらって、
+最新の写真を取得して、写っているオブジェクトについてストーリーを説明して貰う。
+それをTTS APIに投げる。
+
+OpenAIのWhisper, TTS, Assistants APIで長期記憶を持った音声会話型ボットを作る (zenn.dev)
