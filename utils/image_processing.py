@@ -2,27 +2,54 @@ import requests
 import json
 
 def predict_image(mime_type: str, image_data: str, prompt: str, active_model: str) -> dict:
-    Gemini_API_KEY = "自分のやつ。GitHubにはあげない"
+    GOOGLE_API_KEY = ""
 
+    # APIエンドポイントのURL
     url = (
-        "/api/flashGenerateResponseToTextAndImage"
+        f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key={GOOGLE_API_KEY}"
         if active_model == "flash"
-        else "/api/proGenerateResponseToTextAndImage"
+        else
+        f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro-latest:generateContent?key={GOOGLE_API_KEY}"
     )
 
+    # ヘッダーとデータの設定
     headers = {
-        "Content-Type": "application/json",
-        "Authorization": f"Bearer {Gemini_API_KEY}"
+        'Content-Type': 'application/json'
     }
 
-    body = {
-        "prompt": prompt,
-        "imageData": image_data,
-        "mimeType": mime_type
+    data = {
+        "systemInstruction": {
+          "parts": [
+            {
+              "text": "あなたはとても賢いAIアシスタントです"
+            }
+          ]
+        },
+        "contents": {
+          "role": "user",
+          "parts": [
+            {
+              "inlineData": {
+                "mimeType": mime_type,
+                "data": image_data
+              }
+            },
+            {
+              "text": prompt
+            }
+          ]
+        },
+        "generationConfig": {
+            "temperature": 0.4,
+            "maxOutputTokens": 2048,
+            "topP": 1.0,
+            "topK": 32
+        }
     }
 
+    # リクエストを送信
     try:
-        response = requests.post(url, headers=headers, data=json.dumps(body))
+        response = requests.post(url, headers=headers, json=data)
         result = response.json()
         if response.ok:
             return result
